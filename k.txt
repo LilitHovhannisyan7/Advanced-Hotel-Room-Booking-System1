@@ -1,0 +1,10 @@
+Room ID: 1
+Room Type: Single
+This room has a single bed, bathroom, TV, and closet
+Booking History:
+Customer: A
+Booking Period: 2023-01-17 to 2023-01-27
+
+Customer: A
+Booking Period: 2023-07-17 to 2023-07-27
+
