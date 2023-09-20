@@ -57,7 +57,7 @@ public class Main
                 }
                 else if(type == 3)
                 {
-                    room = new Room(roomid, "Double");
+                    room = new Room(roomid, "Deluxe");
                     ++roomid;
                 }
                 else
