@@ -8,12 +8,12 @@ public class Main
     {
         String message = """
                 Welcome to the Advanced Hotel Room Booking System
-                1: Add a Room
-                2: Add a Customer
-                3: Book a Room for a Customer
-                4: Save System State to a File
-                5: Load the state Room
-                6: Make report
+                1: Add a room
+                2: Add a customer
+                3: Book a room
+                4: Save system state to a file
+                5: Load the state room
+                6: Generate report
                 0: Exit
                 """;
         System.out.println(message);
