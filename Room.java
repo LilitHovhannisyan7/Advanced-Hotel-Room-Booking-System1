@@ -4,51 +4,51 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Room implements Serializable
 {
     private int roomId;
-    private String type;
-    private String roomHave;
+    private Type type;
+    private String roomHas;
     protected double price;
 
-    private ArrayList<Booking> bookings;
+    private List<Booking> bookings;
 
 
     public Room()
     {
         this.roomId = 1;
-        this.type = "Single";
+        this.type = Type.SINGLE;
         this.price = 20.0;
     }
 
-    public Room(int roomId, String type)
+    public Room(int roomId, Type type)
     {
         this.roomId = roomId;
         this.bookings = new ArrayList<>();
-        if(type.equals("Single"))
+        switch(type)
         {
-            this.type = type;
-            this.roomHave = "This room has a single bed, bathroom, TV, and closet";
-            this.price = 20.0;
+            case SINGLE:
+                this.type = type;
+                this.roomHas = "This room has a single bed, bathroom, TV, and closet";
+                this.price = 20.0;
+                break;
+            case DOUBLE:
+                this.type = type;
+                this.roomHas = "Double Room: This room has a double bed, bathroom, TV, and closet";
+                this.price = 35.0;
+                break;
+            case DELUXE:
+                this.type = type;
+                this.roomHas = "This room has a minibar, a bathtub, a king-size bed, and a sitting area.";
+                this.price = 55.0;
+                break;
+            default:
+                System.out.println("Sorry, but " + type + " is invalid type of room");
+                break;
         }
-        else if(type.equals("Double"))
-        {
-            this.type = type;
-            this.roomHave = "Double Room: This room has a double bed, bathroom, TV, and closet";
-            this.price = 35.0;
-        }
-        else if(type.equals("Deluxe"))
-        {
-            this.type = type;
-            this.roomHave = "This room has a minibar, a bathtub, a king-size bed, and a sitting area.";
-            this.price = 55.0;
-        }
-        else
-        {
-            System.out.println("Sorry, but " + type + " is invalid type of room");
 
-        }
     }
 
 
@@ -82,44 +82,36 @@ public class Room implements Serializable
         return this.price;
     }
 
-    public String getType()
+    public Type getType()
     {
         return this.type;
     }
 
 
-    public void generateBookingHistoryReport(String filePath)
+    
+    public void generateBookingHistoryReport(String filePath) 
     {
-        try
+        try (FileWriter writer = new FileWriter(filePath)) 
         {
-            FileWriter writer = new FileWriter(filePath);
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            StringBuilder str = new StringBuilder("Room ID: " + roomId + "\n" +
+                    "Room Type: " + type + "\n" +
+                    this.roomHas + "\n" +
+                    "Booking History:\n");
+            writer.write(String.valueOf(str));
 
-            writer.write("Room ID: " + roomId + "\n");
-            writer.write("Room Type: " + type + "\n");
-            writer.write(this.roomHave + "\n");
-            writer.write("Booking History:\n");
-
-            for (Booking booking : bookings)
-            {
+            for (Booking booking : bookings) {
                 writer.write("Customer: " + booking.getCustomer().getName() + "\n");
                 writer.write("Booking Period: " + booking.getStart() + " to " + booking.getEnd() + "\n");
                 writer.write("\n");
             }
 
-            writer.close();
             System.out.println("Booking history report saved to " + filePath);
-
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             System.out.println("Error while saving the booking history report: " + e.getMessage());
         }
-
+    
     }
-
-
-
-
 
 
 }
