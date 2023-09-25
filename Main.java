@@ -68,7 +68,6 @@ public class Main
 
                 switch (number) {
                     case 1:
-                        System.out.println("You chose: " + Menu.ADDROOM);
                         String msg = """
                                 The type for the room: 
                                 1: Single
@@ -77,7 +76,6 @@ public class Main
                                 """;
                         System.out.println(msg);
                         System.out.println("Please enter what type you want: ");
-                        scanner.nextLine();
                         Room room = new Room();
                         int type = scanner.nextInt();
                         switch (type) {
@@ -102,7 +100,9 @@ public class Main
                         }
 
                         operator.addRoom(room.getId(), room.getType());
+                        scanner.nextLine();
                         break;
+
                     case 2:
                         System.out.println("Please tell the customers name: ");
                         scanner.nextLine();
@@ -113,8 +113,8 @@ public class Main
                         operator.addCustomer(customer);
                         break;
                     case 3:
-                        scanner.nextLine();
                         System.out.println("Please enter the customer's contactEmail: ");
+                        scanner.nextLine();
                         String customerEmail = scanner.nextLine();
                         Customer customer1 = operator.getCustomerByEmail(customerEmail);
                         if (customer1 == null) {
@@ -129,39 +129,39 @@ public class Main
                             return;
                         }
 
-                        Scanner scanner7 = new Scanner(System.in);
+                        scanner.nextLine();
                         System.out.println("Please input the start date you want to book: ");
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                        String date = scanner7.nextLine();
-                        LocalDate start = LocalDate.parse(date, formatter);
 
+                        String date = scanner.nextLine();
+                        LocalDate start = LocalDate.parse(date, formatter);
                         System.out.println("Please input the end date you want to book: ");
                         DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                        String date1 = scanner7.nextLine();
+                        String date1 = scanner.nextLine();
                         LocalDate end = LocalDate.parse(date1, formatter1);
-
-
                         operator.bookRoom(customer1, room1, start, end);
                         break;
                     case 4:
-                        scanner.nextLine();
                         System.out.println("Please enter the filePath you want to save the system state: ");
+                        scanner.nextLine();
                         String filePath = scanner.nextLine();
                         operator.saveSystemStateToFile(filePath);
                         break;
                     case 5:
-                        scanner.nextLine();
+
                         System.out.println("Please enter the filePath you want to load the system state from: ");
+                        scanner.nextLine();
                         String filePath1 = scanner.nextLine();
                         operator = operator.loadSystemStateFromFile(filePath1);
                         break;
                     case 6:
-                        scanner.nextLine();
+
                         System.out.println("Please enter the roomId: ");
+                        scanner.nextLine();
                         int roomId1 = scanner.nextInt();
-                        Scanner scanner6 = new Scanner(System.in);
                         System.out.println("Please enter the filePath you want to save the system state: ");
-                        String filePath2 = scanner6.nextLine();
+                        scanner.nextLine();
+                        String filePath2 = scanner.nextLine();
                         operator.generateRoomBookingHistoryReport(roomId1, filePath2);
                         break;
                 }
