@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Customer implements Serializable
@@ -7,7 +8,7 @@ public class Customer implements Serializable
     private String name;
     private String contactEmail;
 
-    private ArrayList<Booking> customerBookings;
+    private List<Booking> customerBookings;
 
     public Customer(String name, String contactEmail)
     {
