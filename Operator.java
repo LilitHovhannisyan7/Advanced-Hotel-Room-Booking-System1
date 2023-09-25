@@ -1,19 +1,21 @@
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+
 
 public class Operator
 {
-    private ArrayList<Customer> customers;
-    private ArrayList<Room> rooms;
+    private List<Customer> customers;
+    private List<Room> rooms;
 
     private static Operator instance;
 
 
-
-
-    public static Operator getInstance() {
-        if (instance == null) {
+    public static Operator getInstance()
+    {
+        if (instance == null)
+        {
             instance = new Operator();
         }
         return instance;
@@ -27,10 +29,8 @@ public class Operator
 
     public void addCustomer(Customer customer)
     {
-        for(int i = 0; i < this.customers.size(); ++i)
-        {
-            if(this.customers.get(i).getContactEmail().equals(customer.getContactEmail()))
-            {
+        for (Customer value : this.customers) {
+            if (value.getContactEmail().equals(customer.getContactEmail())) {
                 System.out.println("Sorry but customer " + customer.getContactEmail() + " is already registered");
                 return;
             }
@@ -40,17 +40,16 @@ public class Operator
         System.out.println("Customer added successfully.");
     }
 
-    public void addRoom(Room room)
+    public void addRoom(int roomId, Type type)
     {
 
-        for(int i = 0; i < this.rooms.size(); ++i)
-        {
-            if(this.rooms.get(i).getId() == room.getId())
-            {
-                System.out.println("Sorry but room " + room.getId() + " is added");
+        for (Room value : this.rooms) {
+            if (value.getId() == roomId) {
+                System.out.println("Sorry but room " + roomId + " is added");
                 return;
             }
         }
+        Room room = new Room(roomId, type);
         rooms.add(room);
         System.out.println("Room added successfully.");
     }
@@ -58,24 +57,18 @@ public class Operator
 
     public void bookRoom(Customer customer, Room room, LocalDate start, LocalDate end)
     {
-        for(int i = 0; i < this.rooms.size(); ++i)
-        {
-            if(this.rooms.get(i).getId() == room.getId())
-            {
+        for (Room value : this.rooms) {
+            if (value.getId() == room.getId()) {
 
-
-                if(room.isAvailable(start, end))
-                {
-                    Booking booking = new Booking(room.getId(),customer, start, end);
+                if (room.isAvailable(start, end)) {
+                    Booking booking = new Booking(room.getId(), customer, start, end);
                     room.addBooking(booking);
                     customer.addBookingToCustomer(booking);
                     Bill bill = new Bill(room, customer, booking);
                     bill.print();
                     saveSystemStateToFile("bill.txt");
 
-                }
-                else
-                {
+                } else {
                     System.out.println("This room is not available");
                     return;
                 }
@@ -88,56 +81,47 @@ public class Operator
     }
 
 
+        public void saveSystemStateToFile(String filePath) {
+        try (FileOutputStream fileOut = new FileOutputStream(filePath);
+             ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
 
-    public void saveSystemStateToFile(String filePath)
-    {
-        try
-        {
-            FileOutputStream fileOut = new FileOutputStream(filePath);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(this.rooms);
             out.writeObject(this.customers);
-            out.close();
-            fileOut.close();
+
             System.out.println("System state saved to " + filePath);
-        }
-        catch(IOException e)
-        {
+        } catch (IOException e) {
             System.out.println("Error while savingSystem");
         }
+
 
     }
 
 
     public Operator loadSystemStateFromFile(String filePath)
     {
-        try
+        try (FileInputStream fileIn = new FileInputStream(filePath);
+             ObjectInputStream in = new ObjectInputStream(fileIn))
         {
-            FileInputStream fileIn = new FileInputStream(filePath);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
 
             this.rooms = (ArrayList<Room>) in.readObject();
-            this.customers  = (ArrayList<Customer>) in.readObject();
-            in.close();
-            fileIn.close();
+            this.customers = (ArrayList<Customer>) in.readObject();
 
             System.out.println("System state loaded from " + filePath);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             System.out.println("Error while loading bill");
         }
+
         return this;
     }
 
 
     public void generateRoomBookingHistoryReport(int roomId, String filePath)
     {
-        for (int i = 0; i < this.rooms.size(); ++i)
-        {
-            if (this.rooms.get(i).getId() == roomId)
-            {
-                this.rooms.get(i).generateBookingHistoryReport(filePath);
+        for (Room room : this.rooms) {
+            if (room.getId() == roomId) {
+                room.generateBookingHistoryReport(filePath);
                 return;
             }
         }
@@ -145,14 +129,11 @@ public class Operator
 
     }
 
-
     public Room getRoomById(int roomId)
     {
-        for (int i = 0; i < this.rooms.size(); ++i)
-        {
-            if (this.rooms.get(i).getId() == roomId)
-            {
-                return this.rooms.get(i);
+        for (Room room : this.rooms) {
+            if (room.getId() == roomId) {
+                return room;
             }
         }
         return null;
@@ -161,13 +142,14 @@ public class Operator
 
     public Customer getCustomerByEmail(String contactEmail)
     {
-        for (int i = 0; i < this.customers.size(); ++i)
+        for (Customer customer : this.customers)
         {
-            if (this.customers.get(i).getContactEmail().equals(contactEmail))
+            if (customer.getContactEmail().equals(contactEmail))
             {
-                return this.customers.get(i);
+                return customer;
             }
         }
         return null;
+
     }
 }
